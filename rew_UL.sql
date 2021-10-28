@@ -35,6 +35,9 @@ select
        when (length(rrci.company_inn) = 10 
             and length(nullif(rrci.company_kpp, '')) != 9)
        then 'Неверная длина КПП'
+       when rrci.legal_form_code != '11'  ---нужно ли делать такую проверку, если инн неверный/не заполнен и это не ип
+            and length(nullif(rrci.company_kpp, '')) != 9
+       then 'Неверный КПП'
   end as kpp_check
 from rm.rmo_company_info rrci
 left join rm.rmo_contracts rrc on rrci.customer_id = rrc.customer_id
